@@ -16,7 +16,7 @@ const CREATE_TABLE_SQL = `
 module.exports.CREATE_TABLE_SQL = CREATE_TABLE_SQL;
 
 function getTimestampAfterNDays(n) {
-    return Math.floor(new Date().setDate(new Date().getDate() + n) / 1000);
+    return Math.floor(new Date().getTime() / 1000) + n * 24 * 60 * 60;
 }
 module.exports.getTimestampAfterNDays = getTimestampAfterNDays;
 
@@ -41,3 +41,15 @@ module.exports.get = function get(key, now = getTimestampAfterNDays(0)) {
         return JSON.parse(result.rows[0].data);
     });
 };
+
+module.exports.del = function del(){
+    let now = Math.floor(new Date().getTime() / 1000)
+    console.log(now)
+    return query(`DELETE FROM ${TABLE_NAME} WHERE expire_on < $1`, [now])
+    .then((result) => {
+        return result
+    })
+    .catch((error) => {
+        throw error
+    })
+}
