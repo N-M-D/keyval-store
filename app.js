@@ -24,8 +24,8 @@ module.exports = express()
             return next(createHttpError(400, 'Please provide a data'));
         }
         // Destructuring Assignment: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-        const { key, expireDuration } = req.query;
-        return add(data, key, expireDuration)
+        const { keys, expireDuration } = req.query;
+        return add(data, keys, expireDuration)
             .then((key) => res.status(201).json({ key }))
             .catch(next);
     })
@@ -34,4 +34,4 @@ module.exports = express()
         console.error(error);
         next(error);
     })
-    .use((error, req, res, next) => res.status(error.status || 500).json({ error: error.message || 'Unknown error' }));
+    .use((error, req, res) => res.status(error.status || 500).json({ error: error.message || 'Unknown error' }));
