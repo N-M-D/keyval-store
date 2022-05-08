@@ -30,6 +30,7 @@ module.exports.add = function add(data, key = nanoid(), expireAfterDays = 7) {
         .then((response) => response.rows[0].key)
         .catch((error) => {
             if (error.code === POSTGRES_ERROR_CODE.UNIQUE_CONSTRAINT) {
+                console.log("Dupe")
                 throw createHttpError(400, `Key ${key} already exists`);
             } else throw error; // unexpected error
         });

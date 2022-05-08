@@ -20,16 +20,16 @@ module.exports = express()
     })
     .post('/storage', (req, res, next) => {
         const data = req.body;
-        const modules = data.modules
-        const keys = data.id
+        console.log("Data")
+        console.log(data)
         if (!data) {
             return next(createHttpError(400, 'Please provide a data'));
         }
         // Destructuring Assignment: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-        const { expireDuration } = req.query;
-        return add(modules, keys, expireDuration)
-            .then((key) => res.status(201).json({ key }))
-            .catch(next);
+        const { key, expireDuration } = req.query;
+        return add(data, key, expireDuration)
+            .then((keys) => res.status(201).json({ keys }))
+            .catch((error)=>{return res.status(400).send()});
     })
     .delete('/storage', (req, res, next) => {
         return del()
